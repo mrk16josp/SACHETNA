@@ -400,12 +400,12 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 8),
           SelectableText(
-            "1. National Suicide Prevention Lifeline: 1-800-273-TALK (1-800-273-8255)",
+            "1. National Suicide Prevention Lifeline: 988",
             style: TextStyle(color: Colors.blue),
           ),
           const SizedBox(height: 4),
           SelectableText(
-            "2. Mental Health America: https://www.mhanational.org/",
+            "2. Link to information about department of clinical psychology: https://khmanipal.com/clinicalpsychology/",
             style: TextStyle(color: Colors.blue),
           ),
           const SizedBox(height: 4),
