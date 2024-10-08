@@ -11,7 +11,7 @@ class DoctorItem extends StatelessWidget {
     required this.image,
     required this.name,
     required this.specialist,
-    required this.onTap,
+    required this.onTap, required String title,
   }) : super(key: key);
 
   @override

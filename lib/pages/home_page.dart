@@ -12,6 +12,9 @@ import 'ask_question_page.dart';
 import 'sad_questionnaire_page.dart';
 import 'anxiety_questionnaire.dart';
 import 'addiction_questionnaire.dart';
+import 'make_appointment_page.dart'; // Import for appointment page
+import 'notifications_page.dart';
+import 'profile_page.dart'; // Import for notification page
 import '../widgets/doctor_item.dart';
 import '../widgets/specialist_item.dart';
 
@@ -23,84 +26,180 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        iconSize: 24,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, color: Colors.black54),
-            label: '',
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    bottomNavigationBar: BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      iconSize: 24,
+      currentIndex: _currentIndex,
+      onTap: onTabTapped, // Handle tab navigation
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined, color: Colors.black54),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_month_outlined, color: Colors.black54),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+  icon: Column(
+    mainAxisAlignment: MainAxisAlignment.end, // Align items to the end
+    children: [
+      const SizedBox(height: 8), // Add space above the text
+      Text(
+        'SOS',
+        style: TextStyle(
+          color: Colors.black54,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  ),
+  label: '',
+),
+
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications_none_outlined, color: Colors.black54),
+          label: '',
+        ),
+      ],
+    ),
+    body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              _buildHeader(context), // Pass context here
+              const SizedBox(height: 30),
+              _buildSelfAssessmentCard(),
+              const SizedBox(height: 20),
+              _buildHelpButton(),
+              const SizedBox(height: 20),
+              _buildSpecialistList(),
+              const SizedBox(height: 20),
+              _buildSkillsHeader(),
+              const SizedBox(height: 20),
+              _buildDoctorList(),
+              const SizedBox(height: 20),
+              _buildReachOutSection(), // Reach out section
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month_outlined, color: Colors.black54),
-            label: '',
+        ),
+      ),
+    ),
+  );
+}
+
+
+  // Method to handle navigation for BottomNavigationBar items
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Navigate based on index
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()), // Navigate to HomePage
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MakeAppointmentPage()), // Navigate to AppointmentPage
+        );
+        break;
+      case 2:
+        // Activate SOS functionality here
+        _showSOSDialog(); // Show SOS dialog or functionality
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NotificationsPage()), // Navigate to NotificationPage
+        );
+        break;
+    }
+  }
+
+// Function to show the SOS confirmation dialog
+void _showSOSDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("SOS Alert"),
+        content: const Text("Are you sure you want to notify your emergency contacts that you are in danger?"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text("Cancel"),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline, color: Colors.black54),
-            label: '',
+          TextButton(
+            onPressed: () {
+              // Call the method to send SOS message
+              _sendSOSMessage();
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text("Yes, Notify"),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_none_outlined, color: Colors.black54),
-            label: '',
+        ],
+      );
+    },
+  );
+}
+
+// Function to send the SOS message
+void _sendSOSMessage() {
+  // Logic to send the SOS message
+  // This could involve sending an SMS, making a phone call, or notifying an API
+  // Example placeholder code:
+  print("SOS message sent!"); // Replace this with actual SOS logic
+}
+
+  // Header widget
+Row _buildHeader(BuildContext context) { // Pass context to the method
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            "Hello,",
+            style: TextStyle(color: Colors.black54, fontSize: 16),
+          ),
+          SizedBox(height: 4),
+          Text(
+            "Mark Joseph",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 12),
-                _buildHeader(),
-                const SizedBox(height: 30),
-                _buildSelfAssessmentCard(),
-                const SizedBox(height: 20),
-                _buildHelpButton(),
-                const SizedBox(height: 20),
-                _buildSpecialistList(),
-                const SizedBox(height: 20),
-                _buildSkillsHeader(), 
-                const SizedBox(height: 20),
-                _buildDoctorList(),
-                const SizedBox(height: 20),
-                _buildReachOutSection(), // Updated reach-out section
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Header widget
-  Row _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "Hello,",
-              style: TextStyle(color: Colors.black54, fontSize: 16),
-            ),
-            SizedBox(height: 4),
-            Text(
-              "Mark Joseph",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
-        const CircleAvatar(
+      InkWell( // Make the CircleAvatar clickable
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()), // Navigate to ProfilePage
+          );
+        },
+        child: const CircleAvatar(
           radius: 30,
           backgroundColor: Colors.grey,
           child: CircleAvatar(
@@ -108,9 +207,11 @@ class _HomePageState extends State<HomePage> {
             backgroundImage: AssetImage("assets/pm.png"),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 
   // Self-assessment card widget
   Container _buildSelfAssessmentCard() {
@@ -301,7 +402,7 @@ class _HomePageState extends State<HomePage> {
           context,
           MaterialPageRoute(builder: (context) => page),
         );
-      },
+      }, title: '',
     );
   }
 
@@ -417,4 +518,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
+} 
